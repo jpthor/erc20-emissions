@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 var Perlin1 = artifacts.require('./Perlin1.sol')
-var Perlin = artifacts.require('./Perlin.sol')
+var Perlin = artifacts.require('./Perlin2.sol')
 const BigNumber = require('bignumber.js')
 const truffleAssert = require('truffle-assertions')
 

@@ -43,7 +43,7 @@ library SafeMath {
     }
 }
     //======================================VETHER=========================================//
-contract Perlin is ERC20 {
+contract Perlin2 is ERC20 {
     using SafeMath for uint256;
 
     // ERC-20 Parameters
