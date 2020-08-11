@@ -38,9 +38,9 @@ describe("Deploy", function() {
     expect(BN2Str(await perlin.totalCap())).to.equal(BN2Str(3000000000 * one));
     expect(BN2Str(await perlin.emissionCurve())).to.equal('2048');
     expect(await perlin.emitting()).to.equal(false);
-    expect(BN2Str(await perlin.currentDay())).to.equal('1');
-    expect(BN2Str(await perlin.secondsPerDay())).to.equal('1');
-    // console.log(BN2Str(await perlin.nextDayTime()));
+    expect(BN2Str(await perlin.currentEra())).to.equal('1');
+    expect(BN2Str(await perlin.secondsPerEra())).to.equal('1');
+    // console.log(BN2Str(await perlin.nextEraTime()));
     expect(await perlin.DAO()).to.equal(acc0);
     expect(await perlin.perlin1()).to.equal(perlin1.address);
     expect(await perlin.burnAddress()).to.equal("0x0000000000000000000000000000000000000001");
@@ -118,9 +118,9 @@ describe("DAO Functions", function() {
     expect(await perlin.name()).to.equal("Perlin2");
     expect(await perlin.symbol()).to.equal("PERL2");
   });
-  it("DAO changeDayDuration", async function() {
-    await perlin.changeDayDuration('2')
-    expect(BN2Str(await perlin.secondsPerDay())).to.equal('2');
+  it("DAO changeEraDuration", async function() {
+    await perlin.changeEraDuration('2')
+    expect(BN2Str(await perlin.secondsPerEra())).to.equal('2');
   });
   it("DAO changeDAO", async function() {
     await perlin.changeDAO(acc2)
@@ -142,13 +142,13 @@ describe("Emissions", function() {
     // await sleep(2000)
     await perlin.transfer(acc1, BN2Str(1000000 * one))
     await perlin.transfer(acc0, BN2Str(1000000 * one), {from:acc1})
-    expect(BN2Str(await perlin.currentDay())).to.equal('2');
+    expect(BN2Str(await perlin.currentEra())).to.equal('2');
     expect(BN2Str(await perlin.balanceOf(acc3))).to.equal(BN2Str('1920703124999999999999998'));
     expect(BN2Str(await perlin.getDailyEmission())).to.equal(BN2Str('1924273682969787810322297'));
     
     await sleep(2000)
     await perlin.transfer(acc1, BN2Str(1000000 * one))
-    expect(BN2Str(await perlin.currentDay())).to.equal('3');
+    expect(BN2Str(await perlin.currentEra())).to.equal('3');
     expect(BN2Str(await perlin.balanceOf(acc3))).to.equal(BN2Str('3844976807969787810322295'));
     expect(BN2Str(await perlin.getDailyEmission())).to.equal(BN2Str('1927850878552671405684157'));
   });

@@ -60,9 +60,9 @@ contract Perlin is ERC20 {
     uint256 public emissionCurve;
     uint256 baseline;
     uint256 public totalCap;
-    uint256 public secondsPerDay;
-    uint256 public currentDay;
-    uint256 public nextDayTime;
+    uint256 public secondsPerEra;
+    uint256 public currentEra;
+    uint256 public nextEraTime;
 
     address public incentiveAddress;
     address public DAO;
@@ -75,7 +75,7 @@ contract Perlin is ERC20 {
     event NewToken(address indexed DAO, string newName, string newSymbol);
     event NewDuration(address indexed DAO, uint256 newDuration);
     event NewDAO(address indexed DAO, address newOwner);
-    event NewDay(uint256 currentDay, uint256 nextDayTime, uint256 emission);
+    event NewEra(uint256 currentEra, uint256 nextEraTime, uint256 emission);
 
     // Only DAO can execute
     modifier onlyDAO() {
@@ -94,9 +94,9 @@ contract Perlin is ERC20 {
         totalCap = 3000000000 * one;
         emissionCurve = 2048;
         emitting = false;
-        currentDay = 1;
-        secondsPerDay = 1; //86400;
-        nextDayTime = now + secondsPerDay;
+        currentEra = 1;
+        secondsPerEra = 1; //86400;
+        nextEraTime = now + secondsPerEra;
         DAO = msg.sender;
         perlin1 = _perlin1; //0xb5A73f5Fc8BbdbcE59bfD01CA8d35062e0dad801;
         baseline = ERC20(perlin1).totalSupply();
@@ -190,8 +190,8 @@ contract Perlin is ERC20 {
         emit NewCurve(msg.sender, newCurve);
     }
     // Can change daily time
-    function changeDayDuration(uint256 newDuration) public onlyDAO{
-        secondsPerDay = newDuration;
+    function changeEraDuration(uint256 newDuration) public onlyDAO{
+        secondsPerEra = newDuration;
         emit NewDuration(msg.sender, newDuration);
     }
     // Can change Incentive Address
@@ -213,12 +213,12 @@ contract Perlin is ERC20 {
     //======================================EMISSION========================================//
     // Internal - Update emission function
     function _checkEmission() private {
-        if ((now >= nextDayTime) && emitting) {                                            // If new day and allowed to emit
-            currentDay += 1;                                                               // Increment Day
-            nextDayTime = now + secondsPerDay;                                             // Set next Day time
+        if ((now >= nextEraTime) && emitting) {                                            // If new Era and allowed to emit
+            currentEra += 1;                                                               // Increment Era
+            nextEraTime = now + secondsPerEra;                                             // Set next Era time
             uint256 _emission = getDailyEmission();                                        // Get Daily Dmission
             _mint(incentiveAddress, _emission);                                            // Mint to the Incentive Address
-            emit NewDay(currentDay, nextDayTime, _emission);                               // Emit Event
+            emit NewEra(currentEra, nextEraTime, _emission);                               // Emit Event
         }
     }
     // Calculate Daily Emission
