@@ -177,37 +177,43 @@ contract Perlin2 is ERC20 {
 
     //=========================================DAO=========================================//
     // Can start
-    function startEmissions() public onlyDAO{
+    function startEmissions() public onlyDAO {
         emitting = true;
     }
     // Can stop
-    function stopEmissions() public onlyDAO{
+    function stopEmissions() public onlyDAO {
         emitting = false;
     }
     // Can change emissionCurve
-    function changeEmissionCurve(uint256 newCurve) public onlyDAO{
+    function changeEmissionCurve(uint256 newCurve) public onlyDAO {
         emissionCurve = newCurve;
         emit NewCurve(msg.sender, newCurve);
     }
     // Can change daily time
-    function changeEraDuration(uint256 newDuration) public onlyDAO{
+    function changeEraDuration(uint256 newDuration) public onlyDAO {
         secondsPerEra = newDuration;
         emit NewDuration(msg.sender, newDuration);
     }
     // Can change Incentive Address
-    function changeIncentiveAddress(address newIncentiveAddress) public onlyDAO{
+    function changeIncentiveAddress(address newIncentiveAddress) public onlyDAO {
         incentiveAddress = newIncentiveAddress;
         emit NewIncentiveAddress(msg.sender, newIncentiveAddress);
     }
     // Can change Token
-    function changeToken(string memory newName, string memory newSymbol) public onlyDAO{
+    function changeToken(string memory newName, string memory newSymbol) public onlyDAO {
         name = newName; symbol = newSymbol;
         emit NewToken(msg.sender, newName, newSymbol);
     }
     // Can change DAO
-    function changeDAO(address newDAO) public onlyDAO{
+    function changeDAO(address newDAO) public onlyDAO {
+        require(newDAO != address(0), "Must not be zero address");
         DAO = newDAO;
         emit NewDAO(msg.sender, newDAO);
+    }
+    // Can purge DAO
+    function purgeDAO() public onlyDAO {
+        DAO = address(0);
+        emit NewDAO(msg.sender, address(0));
     }
 
     //======================================EMISSION========================================//
